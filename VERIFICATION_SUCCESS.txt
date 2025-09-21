@@ -1,0 +1,33 @@
+===========================================
+      AGNO GUI INTERFACE v1.0.4
+===========================================
+
+✅ SISTEMA FUNCIONAL NA PORTA 3006
+
+📊 STATUS:
+- Node.js: v22.17.0 ✅
+- Next.js: v15.0.0 ✅
+- Porta: 3006 ✅
+- URL: http://localhost:3006 ✅
+
+🚀 COMO USAR:
+
+1. Mantenha o servidor rodando neste terminal
+2. Abra o navegador e acesse: http://localhost:3006
+3. Para parar: Ctrl+C neste terminal
+
+📝 OBSERVAÇÕES:
+- Os erros 404 para /dashboard são normais (página ainda não implementada)
+- A página inicial está carregando com sucesso (status 200)
+- Sistema pronto para desenvolvimento
+
+🔧 SCRIPTS DISPONÍVEIS:
+- .\start-agno-gui.ps1 (PowerShell - Recomendado)
+- .\start-minimal.bat (Batch - Simples)
+- .\start-simple.bat (Batch - Completo)
+
+📚 LOGS:
+- Console: Este terminal
+- Arquivos: logs/frontend.log (se configurado)
+
+===========================================

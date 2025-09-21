@@ -41,14 +41,14 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('http://localhost:3000'),
+  metadataBase: new URL('http://localhost:3006'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'http://localhost:3000',
+    url: 'http://localhost:3006',
     title: 'Agno GUI Interface',
     description: 'Advanced GUI interface for Agno multi-agent framework with LLM integrations',
     siteName: 'Agno GUI Interface',

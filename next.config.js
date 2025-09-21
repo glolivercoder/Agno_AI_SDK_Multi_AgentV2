@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ['@prisma/client', 'better-sqlite3'],
-  },
+  // Configurações de imagem
   images: {
     domains: ['localhost', 'openrouter.ai', 'generativelanguage.googleapis.com'],
     remotePatterns: [
@@ -13,6 +10,8 @@ const nextConfig = {
       },
     ],
   },
+
+  // Headers de CORS
   async headers() {
     return [
       {
@@ -25,6 +24,8 @@ const nextConfig = {
       },
     ];
   },
+
+  // Configuração Webpack
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -35,7 +36,7 @@ const nextConfig = {
       };
     }
 
-    // Monaco Editor webpack configuration
+    // Configuração para fontes (Monaco Editor)
     config.module.rules.push({
       test: /\.ttf$/,
       type: 'asset/resource',
@@ -43,16 +44,11 @@ const nextConfig = {
 
     return config;
   },
+
+  // Variáveis de ambiente
   env: {
     NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
-  },
-  // Enable PWA support
-  withPWA: true,
-  pwa: {
-    dest: 'public',
-    register: true,
-    skipWaiting: true,
   },
 };
 

@@ -1,0 +1,278 @@
+╔════════════════════════════════════════════════════════════╗
+║                  AGNO GUI INTERFACE                        ║
+║                 GUIA DE TROUBLESHOOTING                    ║
+║                 v1.0.1                                     ║
+╚════════════════════════════════════════════════════════════╝
+
+PROBLEMAS COMUNS E SOLUCOES
+════════════════════════════════════════════════════════════
+
+PROBLEMA: "chcp nao e reconhecido como comando"
+SOLUCAO: Use o PowerShell em vez do CMD
+   1. Abra o PowerShell no diretorio do projeto
+   2. Execute: .\start-agno-gui.ps1
+   3. OU: powershell -ExecutionPolicy Bypass -File start-agno-gui.ps1
+
+PROBLEMA: "Node.js nao encontrado"
+VERIFICACAO: Teste se o Node.js esta instalado
+   1. Execute: npm --version
+   2. Se npm funciona, Node.js esta instalado
+   3. Se nao, reinicie o terminal/PowerShell
+
+PROBLEMA: "npm nao encontrado"
+SOLUCAO: Instalar Node.js
+   1. Baixe Node.js 18+ de: https://nodejs.org/
+   2. Reinicie o terminal apos instalacao
+   3. Teste: npm --version
+
+PROBLEMA: "Erro de permissao no Windows"
+SOLUCAO: Executar PowerShell como Administrador
+   1. Clique com botao direito no PowerShell
+   2. "Executar como Administrador"
+   3. OU execute: Set-ExecutionPolicy -ExecutionPolicy RemoteSigned
+
+PROBLEMA: "Porta 3000 ja em uso"
+SOLUCAO: Fechar outros servidores Next.js
+   1. Execute: npx kill-port 3000
+   2. OU feche manualmente no Gerenciador de Tarefas
+   3. Procure por processos "node.exe"
+
+PROBLEMA: "Docker nao inicia"
+SOLUCAO: Docker e opcional
+   1. Use sem Docker: .\start-agno-gui.ps1 -SkipDocker
+   2. OU instale Docker Desktop: https://www.docker.com/products/docker-desktop/
+   3. Reinicie o computador apos instalacao
+
+PROBLEMA: "Dependencias nao instalam"
+SOLUCAO: Verificar conexao e permissoes
+   1. Verifique conexao com internet
+   2. Execute como Administrador
+   3. Limpe cache: npm cache clean --force
+   4. Reinstale: npm install --legacy-peer-deps
+
+PROBLEMA: "Aplicacao nao inicia"
+VERIFICACAO: Seguir passos de debugging
+   1. Verifique logs: .\view_logs.bat
+   2. Teste saude: .\check_health.bat
+   3. Verifique .env.local existe
+   4. Reinicie sistema: .\utils.bat restart
+
+PROBLEMA: "Banco de dados nao conecta"
+SOLUCAO: Verificar PostgreSQL
+   1. Docker e necessario para banco
+   2. Execute: docker-compose up -d postgres
+   3. Verifique logs: docker-compose logs postgres
+   4. Teste conexao: docker-compose exec postgres psql -U agno_user -d agno_gui
+
+PROBLEMA: "Logs nao aparecem"
+SOLUCAO: Verificar sistema de logs
+   1. Certifique-se que logs/ existe
+   2. Execute inicializacao primeiro
+   3. Verifique permissoes de escrita
+   4. Use: .\view_logs.bat para ver logs
+
+PROBLEMA: "Comando nao encontrado"
+SOLUCAO: Verificar PATH e permissoes
+   1. Reinicie o terminal/PowerShell
+   2. Execute como Administrador
+   3. Verifique se arquivos existem
+   4. Use o PowerShell recomendado
+
+COMANDOS DE DIAGNOSTICO
+════════════════════════════════════════════════════════════
+
+# Verificar Node.js
+npm --version
+node --version
+
+# Verificar Docker
+docker --version
+docker-compose --version
+
+# Verificar portas
+netstat -an | findstr "LISTENING" | findstr ":3000"
+netstat -an | findstr "LISTENING" | findstr ":8000"
+
+# Verificar processos
+tasklist | findstr "node.exe"
+
+# Limpar cache
+npm cache clean --force
+rmdir /s /q .next node_modules
+npm install --legacy-peer-deps
+
+SOLUCOES AVANCADAS
+════════════════════════════════════════════════════════════
+
+1. Se PowerShell da erro:
+   - Use CMD: .\INICIAR_AGNO_AGENTS.bat
+   - OU configure PowerShell: Set-ExecutionPolicy RemoteSigned
+
+2. Se Docker falha:
+   - Use apenas frontend: .\start-agno-gui.ps1 -SkipDocker
+   - Instale Docker Desktop
+   - Reinicie computador
+
+3. Se banco falha:
+   - Use SQLite para desenvolvimento
+   - Configure PostgreSQL manualmente
+   - Verifique porta 5432
+
+4. Se dependencias falham:
+   - Use: npm install --legacy-peer-deps --force
+   - Limpe cache: npm cache clean --force
+   - Reinstale tudo: rmdir node_modules && npm install
+
+VERIFICACAO COMPLETA DO SISTEMA
+════════════════════════════════════════════════════════════
+
+Execute este comando para diagnostico completo:
+.\check_health.bat
+
+Para logs em tempo real:
+.\view_logs.bat
+
+Para ajuda completa:
+.\utils.bat help
+
+ARQUIVOS IMPORTANTES
+════════════════════════════════════════════════════════════
+
+- INICIAR_AGNO_AGENTS.bat    # Inicializacao principal
+- start-agno-gui.ps1         # Versao PowerShell
+- QUICK_START.txt            # Instrucoes rapidas
+- logs/README.md             # Documentacao de logs
+- README.md                  # Documentacao completa
+
+SUPORTE
+════════════════════════════════════════════════════════════
+
+1. Consulte primeiro: QUICK_START.txt
+2. Verifique logs: logs\system_health.log
+3. Execute diagnostico: .\check_health.bat
+4. Para bugs: Abra issue no GitHub
+5. Email: support@agnogui.com
+
+DICAS FINAIS
+════════════════════════════════════════════════════════════
+
+1. Use sempre PowerShell para melhor compatibilidade
+2. Execute como Administrador se houver problemas
+3. Docker e opcional - funciona sem ele
+4. Verifique logs se algo der errado
+5. Reinicie terminal se comandos nao funcionarem
+
+PROBLEMAS ESPECIFICOS DE DEPENDENCIAS
+═══════════════════════════════════════════════════════════
+
+❌ "Dependencias nao instalam"
+SOLUCAO: Sistema de instalação em duas etapas
+   1. Execute primeiro: .\start-agno-gui.ps1 (dependências essenciais)
+   2. Se precisar de funcionalidades completas: .\install-optional-deps.bat
+   3. Verifique conexao com internet
+   4. Execute como Administrador se houver problemas de permissao
+
+❌ "npm install falha com erro do Prisma"
+SOLUCAO: Prisma removido temporariamente
+   1. O Prisma foi removido do package.json para evitar conflitos
+   2. Sistema funciona com SQLite inicialmente
+   3. PostgreSQL pode ser adicionado depois via Docker
+
+❌ "ESLint deprecated warning"
+SOLUCAO: Versões atualizadas
+   1. ESLint atualizado para versao 8.57.0
+   2. TypeScript ESLint atualizado para versao 7.x
+   3. Warning e apenas informativo, nao afeta funcionalidade
+
+❌ "Erro: Cannot find module 'prisma'"
+SOLUCAO: Prisma removido para compatibilidade
+   1. Execute: .\start-agno-gui.ps1 (funciona sem Prisma)
+   2. Para banco PostgreSQL: docker-compose up postgres
+   3. Prisma pode ser adicionado depois se necessario
+
+❌ "napi-postinstall não é reconhecido"
+SOLUCAO: Problema de dependência nativa do Windows
+   1. Execute: .\install-emergency.bat (instalação mínima)
+   2. OU: npm install --no-optional (ignora opcionais)
+   3. Sistema funciona com dependências essenciais
+
+❌ "unrs-resolver compilation failed"
+SOLUCAO: Resolver de URLs nativo com problema no Windows
+   1. Use: .\install-emergency.bat
+   2. Dependência removida do package.json
+   3. Sistema funciona sem ela inicialmente
+
+❌ "Erro de compilação nativa no Windows"
+SOLUCAO: Sistema simplificado para Windows
+   1. Todas as dependências nativas removidas
+   2. Apenas JavaScript/TypeScript puro
+   3. Funcionalidades avançadas podem ser adicionadas depois
+
+INSTALACAO MINIMA (SE TUDO FALHAR)
+═══════════════════════════════════════════════════════════
+
+Se os scripts falharem completamente:
+
+1. Limpeza completa:
+   rmdir /s /q node_modules
+   npm cache clean --force
+
+2. Instalacao basica:
+   npm install
+
+3. Teste:
+   npm run dev
+
+4. Se funcionar, adicione dependencias opcionais:
+   .\install-optional-deps.bat
+
+SOLUCAO DE EMERGENCIA
+═══════════════════════════════════════════════════════════
+
+Se nada funcionar:
+
+1. Use apenas o essencial:
+   npm install next react react-dom zustand @tanstack/react-query tailwindcss
+
+2. Inicie manualmente:
+   npm run dev
+
+3. Acesse: http://localhost:3000
+
+RESOLUCAO ESPECIFICA: unrs-resolver
+═══════════════════════════════════════════════════════════
+
+O erro do unrs-resolver e causado por:
+
+1. **Dependência nativa:** unrs-resolver é uma biblioteca Rust compilada
+2. **Windows compatibility:** Problemas de compilação no Windows
+3. **npm postinstall:** Script de pós-instalação falhando
+
+**Soluções aplicadas:**
+✅ Removido do package.json
+✅ Sistema funciona sem ele
+✅ Alternativas implementadas
+
+**Para resolver permanentemente:**
+1. Use WSL2 no Windows
+2. Instale Visual Studio Build Tools
+3. Use Docker para desenvolvimento
+4. Aguarde atualizações da biblioteca
+
+PROBLEMA ESPECIFICO: PowerShell Start-Process
+═══════════════════════════════════════════════════════════
+
+❌ "RedirectStandardOutput and RedirectStandardError are same"
+SOLUCAO: Problema de sintaxe no PowerShell
+   1. Corrigido nos scripts: stdout e stderr em arquivos separados
+   2. Use: .\start-agno-gui.ps1 (agora funciona)
+   3. OU: .\install-emergency.bat (instalação garantida)
+   4. Verifique logs: logs\frontend-error.log (erros separados)
+
+**Arquivos de log atualizados:**
+- stdout: logs\frontend.log
+- stderr: logs\frontend-error.log
+- Verifique ambos para debugging completo
+
+STATUS: ✅ TROUBLESHOOTING PRONTO
+════════════════════════════════════════════════════════════

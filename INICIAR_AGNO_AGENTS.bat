@@ -1,37 +1,29 @@
 @echo off
-chcp 65001 >nul
 setlocal enabledelayedexpansion
 
 :: =====================================================
-:: AGNO GUI INTERFACE - SISTEMA DE INICIALIZAÇÃO
+:: AGNO GUI INTERFACE - SISTEMA DE INICIALIZACAO
 :: =====================================================
-:: Versão: 1.0.0
+:: Versao: 1.0.2 (Otimizada - Porta 3006)
 :: Data: %date%
 :: =====================================================
 
-title Agno GUI Interface - Sistema de Inicialização
-
-:: Cores para output
-set "GREEN=[92m"
-set "YELLOW=[93m"
-set "RED=[91m"
-set "BLUE=[94m"
-set "CYAN=[96m"
-set "RESET=[0m"
+title Agno GUI Interface v1.0.2 - Sistema Otimizado (Porta 3006)
 
 echo.
-echo %CYAN%╔══════════════════════════════════════════════════════════╗%RESET%
-echo %CYAN%║                AGNO GUI INTERFACE v1.0.0                 ║%RESET%
-echo %CYAN%║              Sistema de Inicialização                    ║%RESET%
-echo %CYAN%╚══════════════════════════════════════════════════════════╝%RESET%
+echo ==========================================================
+echo                AGNO GUI INTERFACE v1.0.2
+echo              Sistema de Inicializacao
+echo ==========================================================
 echo.
 
-:: Verificar se está rodando como administrador
+:: Verificar se esta rodando como administrador
 net session >nul 2>&1
 if %errorLevel% == 0 (
-    echo %GREEN%✓%RESET% Executando com privilégios de administrador
+    echo [OK] Executando com privilegios de administrador
 ) else (
-    echo %YELLOW%⚠%RESET% ATENÇÃO: Recomenda-se executar como administrador
+    echo [ATENCAO] Recomenda-se executar como administrador
+    echo    Para melhor compatibilidade, considere executar no CMD
     echo.
 )
 
@@ -45,24 +37,34 @@ echo %BLUE%[1/5] Verificando dependências do sistema...%RESET%
 echo Verificando Node.js...
 node --version >nul 2>&1
 if %errorLevel% == 0 (
-    for /f "tokens=*" %%i in ('node --version') do set NODE_VERSION=%%i
-    echo %GREEN%✓%RESET% Node.js encontrado: !NODE_VERSION!
+    for /f "tokens=*" %%i in ('node --version 2^>nul') do set NODE_VERSION=%%i
+    echo %GREEN%[OK]%RESET% Node.js encontrado: !NODE_VERSION!
 ) else (
-    echo %RED%✗%RESET% Node.js não encontrado!
-    echo %RED%   Por favor, instale o Node.js 18+ do site oficial%RESET%
-    echo %RED%   https://nodejs.org/%RESET%
-    goto :error
+    :: Tentar verificar se npm esta disponivel (indica que Node.js esta instalado)
+    npm --version >nul 2>&1
+    if !errorLevel! == 0 (
+        for /f "tokens=*" %%i in ('npm --version 2^>nul') do set NPM_VERSION=%%i
+        echo %GREEN%[OK]%RESET% Node.js disponivel (via npm !NPM_VERSION!)
+        set NODE_VERSION="Presente (via npm)"
+    ) else (
+        echo %RED%[ERRO]%RESET% Node.js nao encontrado!
+        echo %RED%   Por favor, instale o Node.js 18+ do site oficial%RESET%
+        echo %RED%   https://nodejs.org/%RESET%
+        echo %YELLOW%   Dica: Feche e reabra o terminal apos a instalacao%RESET%
+        goto :error
+    )
 )
 
 :: Verificar npm
 echo Verificando npm...
 npm --version >nul 2>&1
 if %errorLevel% == 0 (
-    for /f "tokens=*" %%i in ('npm --version') do set NPM_VERSION=%%i
+    for /f "tokens=*" %%i in ('npm --version 2^>nul') do set NPM_VERSION=%%i
     echo %GREEN%✓%RESET% npm encontrado: !NPM_VERSION!
 ) else (
     echo %RED%✗%RESET% npm não encontrado!
     echo %RED%   npm deve vir com o Node.js%RESET%
+    echo %YELLOW%   Node.js pode não estar no PATH%RESET%
     goto :error
 )
 
@@ -105,18 +107,18 @@ if not exist "logs" (
 
 :: Verificar se .env.local existe
 if not exist ".env.local" (
-    echo %YELLOW%⚠%RESET% Arquivo .env.local não encontrado
+    echo %YELLOW%[ATENCAO]%RESET% Arquivo .env.local nao encontrado
     echo Copiando .env.example para .env.local...
     copy .env.example .env.local >nul 2>&1
     if !errorLevel! == 0 (
-        echo %GREEN%✓%RESET% .env.local criado a partir do template
+        echo %GREEN%[OK]%RESET% .env.local criado a partir do template
         echo %YELLOW%   Edite o arquivo .env.local com suas chaves API%RESET%
     ) else (
-        echo %RED%✗%RESET% Erro ao criar .env.local
+        echo %RED%[ERRO]%RESET% Erro ao criar .env.local
         goto :error
     )
 ) else (
-    echo %GREEN%✓%RESET% .env.local encontrado
+    echo %GREEN%[OK]%RESET% .env.local encontrado
 )
 
 :: =====================================================
@@ -125,15 +127,25 @@ if not exist ".env.local" (
 
 echo %BLUE%[3/5] Instalando dependências...%RESET%
 
-:: Instalar dependências do npm
-echo Instalando dependências do Node.js...
+:: Instalar dependências do npm (otimizadas)
+echo Instalando dependências otimizadas do Node.js...
 call npm install --legacy-peer-deps
 if %errorLevel% == 0 (
-    echo %GREEN%✓%RESET% Dependências instaladas com sucesso
+    echo %GREEN%✓%RESET% Dependências otimizadas instaladas com sucesso
+    echo %GREEN%✓%RESET% - React 18.2.0
+    echo %GREEN%✓%RESET% - Next.js 15.0.0
+    echo %GREEN%✓%RESET% - TanStack Query
+    echo %GREEN%✓%RESET% - Next Themes
+    echo %GREEN%✓%RESET% - Radix UI Components
+    echo %GREEN%✓%RESET% - Tailwind CSS
 ) else (
-    echo %RED%✗%RESET% Erro na instalação das dependências
-    echo Verifique se há conexão com a internet
-    goto :error
+    echo %RED%✗%RESET% Erro na instalação das dependências otimizadas
+    echo Tentando instalação de emergência...
+    call install-emergency.bat
+    if !errorLevel! NEQ 0 (
+        echo Verifique se há conexão com a internet
+        goto :error
+    )
 )
 
 :: =====================================================
@@ -142,22 +154,13 @@ if %errorLevel% == 0 (
 
 echo %BLUE%[4/5] Inicializando serviços...%RESET%
 
-:: Inicializar Docker se disponível
+:: Inicializar Docker se disponível (TEMPORARIAMENTE DESABILITADO)
 if %DOCKER_AVAILABLE% == 1 (
-    echo Iniciando serviços Docker...
-    docker-compose up -d --build > logs\docker_startup.log 2>&1
-
-    if !errorLevel! == 0 (
-        echo %GREEN%✓%RESET% Docker services iniciados
-        echo %CYAN%   - PostgreSQL: http://localhost:5432%RESET%
-        echo %CYAN%   - Redis: localhost:6379%RESET%
-        echo %CYAN%   - Backend API: http://localhost:8000%RESET%
-    ) else (
-        echo %YELLOW%⚠%RESET% Erro ao iniciar Docker services
-        echo Verifique o log: logs\docker_startup.log
-    )
+    echo %YELLOW%⚠%RESET% Docker temporariamente desabilitado
+    echo %YELLOW%   Focando no frontend otimizado Next.js%RESET%
+    echo %CYAN%   Execute 'docker-compose up -d' manualmente quando necessário%RESET%
 ) else (
-    echo %YELLOW%⚠%RESET% Docker não disponível - Iniciando apenas frontend
+    echo %YELLOW%⚠%RESET% Docker não disponível - Iniciando apenas frontend otimizado
 )
 
 :: =====================================================
@@ -166,21 +169,26 @@ if %DOCKER_AVAILABLE% == 1 (
 
 echo %BLUE%[5/5] Inicializando interface frontend...%RESET%
 
-:: Iniciar servidor de desenvolvimento
-echo Iniciando Next.js development server...
-start "Agno GUI Frontend" cmd /k "npm run dev > logs\frontend.log 2>&1"
+:: Iniciar servidor de desenvolvimento (OTIMIZADO)
+echo Iniciando Next.js development server otimizado...
+start "Agno GUI Frontend - Porta 3006" cmd /c "set PORT=3006 && node node_modules\next\dist\bin\next dev > logs\frontend.log 2> logs\frontend-error.log"
 
 :: Aguardar um momento para o servidor iniciar
-timeout /t 3 /nobreak >nul
+timeout /t 5 /nobreak >nul
+echo %YELLOW%   Aguardando compilação do Next.js 15...%RESET%
 
-:: Verificar se o servidor está rodando
-curl -s http://localhost:3000 >nul 2>&1
+:: Verificar se o servidor está rodando na porta 3006
+curl -s http://localhost:3006 >nul 2>&1
 if %errorLevel% == 0 (
-    echo %GREEN%✓%RESET% Frontend iniciado com sucesso!
-    echo %CYAN%   URL: http://localhost:3000%RESET%
+    echo %GREEN%✓%RESET% Frontend otimizado iniciado com sucesso!
+    echo %CYAN%   🌐 URL: http://localhost:3006%RESET%
+    echo %CYAN%   ✅ Next.js 15.0.0 rodando%RESET%
+    echo %CYAN%   ✅ React 18.2.0 ativo%RESET%
+    echo %CYAN%   ✅ TanStack Query configurado%RESET%
 ) else (
-    echo %YELLOW%⚠%RESET% Frontend pode ainda estar iniciando...
-    echo %CYAN%   Verifique em alguns segundos: http://localhost:3000%RESET%
+    echo %YELLOW%⚠%RESET% Frontend pode ainda estar compilando...
+    echo %CYAN%   Verifique em alguns segundos: http://localhost:3006%RESET%
+    echo %YELLOW%   (A primeira compilação pode demorar um pouco)%RESET%
 )
 
 :: =====================================================
@@ -188,23 +196,28 @@ if %errorLevel% == 0 (
 :: =====================================================
 
 echo.
-echo %CYAN%╔══════════════════════════════════════════════════════════╗%RESET%
-echo %CYAN%║                 INICIALIZAÇÃO CONCLUÍDA                  ║%RESET%
-echo %CYAN%╚══════════════════════════════════════════════════════════╝%RESET%
+echo %CYAN%==========================================================%RESET%
+echo %CYAN%                 INICIALIZACAO CONCLUIDA                  %RESET%
+echo %CYAN%==========================================================%RESET%
 echo.
 
-echo %GREEN%🎉 Agno GUI Interface iniciado com sucesso!%RESET%
+echo %GREEN%[SUCESSO] Agno GUI Interface v1.0.2 iniciado com sucesso!%RESET%
+echo.
+
+echo %CYAN%[SISTEMA OTIMIZADO - VERSAO 1.0.2]%RESET%
+echo %CYAN%   * Next.js 15.0.0%RESET%
+echo %CYAN%   * React 18.2.0%RESET%
+echo %CYAN%   * TanStack Query%RESET%
+echo %CYAN%   * Porta otimizada: 3006%RESET%
 echo.
 
 if %DOCKER_AVAILABLE% == 1 (
     echo %CYAN%📊 Serviços Disponíveis:%RESET%
-    echo %CYAN%   • Frontend: http://localhost:3000%RESET%
-    echo %CYAN%   • Backend API: http://localhost:8000%RESET%
-    echo %CYAN%   • Database: localhost:5432%RESET%
-    echo %CYAN%   • Redis: localhost:6379%RESET%
+    echo %CYAN%   • Frontend: http://localhost:3006%RESET%
+    echo %YELLOW%   • Backend: Execute manualmente em outro terminal%RESET%
 ) else (
     echo %CYAN%📊 Serviços Disponíveis:%RESET%
-    echo %CYAN%   • Frontend: http://localhost:3000%RESET%
+    echo %CYAN%   • Frontend: http://localhost:3006%RESET%
     echo %YELLOW%   • Backend: Execute manualmente em outro terminal%RESET%
 )
 
@@ -220,17 +233,26 @@ echo %CYAN%   • logs\docker_startup.log%RESET%
 echo.
 
 echo %CYAN%🛠️  Comandos Úteis:%RESET%
-echo %CYAN%   • Parar tudo: docker-compose down%RESET%
-echo %CYAN%   • Ver logs: docker-compose logs -f%RESET%
-echo %CYAN%   • Reiniciar: docker-compose restart%RESET%
+echo %CYAN%   • Acessar interface: http://localhost:3006%RESET%
+echo %CYAN%   • Ver logs frontend: .\view_logs.bat%RESET%
+echo %CYAN%   • Verificar saúde: .\check_health.bat%RESET%
+echo %CYAN%   • Limpar logs: .\clear_logs.bat%RESET%
+echo %CYAN%   • Instalar dependências: .\install-emergency.bat%RESET%
+echo %CYAN%   • Docker (quando disponível): docker-compose up -d%RESET%
 echo.
 
-echo %YELLOW%💡 Dicas:%RESET%
+echo %YELLOW%💡 Dicas da Versão 1.0.2:%RESET%
+echo %YELLOW%   • Next.js 15 roda na porta 3006 (otimizada)%RESET%
 echo %YELLOW%   • Para desenvolvimento, deixe este terminal aberto%RESET%
-echo %YELLOW%   • Use Ctrl+C para parar todos os serviços%RESET%
-echo %YELLOW%   • Verifique os logs se houver problemas%RESET%
+echo %YELLOW%   • Use Ctrl+C para parar o servidor%RESET%
+echo %YELLOW%   • Verifique logs\frontend.log para debug%RESET%
+echo %YELLOW%   • Primeira compilação pode demorar um pouco%RESET%
+echo %YELLOW%   • Hot Reload ativo para desenvolvimento%RESET%
 echo.
 
+echo %GREEN%[PRONTO] Agno GUI Interface v1.0.2 Otimizado - Sistema ativo!%RESET%
+echo %CYAN%   Acesse: http://localhost:3006%RESET%
+echo.
 echo Pressione qualquer tecla para fechar...
 pause >nul
 

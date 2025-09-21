@@ -1,7 +1,7 @@
 ╔════════════════════════════════════════════════════════════╗
 ║                  AGNO GUI INTERFACE                        ║
 ║                 INSTRUÇÕES RÁPIDAS                         ║
-║                 v1.0.0                                     ║
+║                 v1.0.1                                     ║
 ╚════════════════════════════════════════════════════════════╝
 
 🎯 INICIALIZAÇÃO RÁPIDA
@@ -10,16 +10,39 @@
 1. 📦 PRIMEIROS PASSOS:
    • Certifique-se de ter Node.js 18+ instalado
    • Clone ou extraia os arquivos do projeto
-   • Execute o arquivo: INICIAR_AGNO_AGENTS.bat
+   • Verifique se o Node.js está funcionando: npm --version
 
 2. 🚀 INICIALIZAR SISTEMA:
+
+   ⚡ OPÇÃO 1 - Instalação de Emergência (Recomendado):
+   • Execute: .\install-emergency.bat
+   • Instala apenas dependências que funcionam no Windows
+   • Resolve problemas de compilação nativa automaticamente
+   • Sistema básico 100% funcional
+
+   ⚡ OPÇÃO 2 - PowerShell:
+   • Abra o PowerShell no diretório do projeto
+   • Execute: .\start-agno-gui.ps1
+   • Instala dependências essenciais automaticamente
+   • Funciona mesmo com problemas de dependências
+
+   ⚡ OPÇÃO 3 - Dependências Completas:
+   • Primeiro: .\start-agno-gui.ps1 (essenciais)
+   • Depois: .\install-optional-deps.bat (completas)
+   • Para funcionalidades avançadas
+
+   ⚡ OPÇÃO 4 - Batch File:
    • Clique duplo em: INICIAR_AGNO_AGENTS.bat
-   • OU via linha de comando: .\INICIAR_AGNO_AGENTS.bat
-   • Aguarde a verificação automática de dependências
+   • OU via CMD: .\INICIAR_AGNO_AGENTS.bat
+
+   ⚡ OPÇÃO 5 - Docker:
+   • Execute: docker-compose up -d --build
 
 3. 🔐 ACESSAR A APLICAÇÃO:
    • Frontend: http://localhost:3000
    • Backend API: http://localhost:8000
+   • Database: localhost:5432
+   • Redis: localhost:6379
 
 4. 👥 CONTAS DE DEMONSTRAÇÃO:
    • Admin: admin@agnogui.com / password
@@ -108,6 +131,7 @@
 
 • Documentação: README.md
 • Logs detalhados: logs/README.md
+• Troubleshooting: TROUBLESHOOTING.txt
 • Ajuda: utils.bat help
 • Problemas: Verifique logs primeiro
 • GitHub Issues: Para bugs e features

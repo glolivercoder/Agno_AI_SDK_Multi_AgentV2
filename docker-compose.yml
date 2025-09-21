@@ -37,34 +37,34 @@ services:
       timeout: 5s
       retries: 5
 
-  # FastAPI Backend
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: agno-gui-backend
-    restart: unless-stopped
-    environment:
-      - DATABASE_URL=postgresql://agno_user:agno_password@postgres:5432/agno_gui
-      - REDIS_URL=redis://redis:6379
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-      - AGNO_API_KEY=${AGNO_API_KEY}
-      - MCP_CONTEXT7_API_KEY=${MCP_CONTEXT7_API_KEY}
-    ports:
-      - "8000:8000"
-    volumes:
-      - ./backend:/app
-    depends_on:
-      postgres:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+  # Placeholder para Backend (comentado - será implementado depois)
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: agno-gui-backend
+  #   restart: unless-stopped
+  #   environment:
+  #     - DATABASE_URL=postgresql://agno_user:agno_password@postgres:5432/agno_gui
+  #     - REDIS_URL=redis://redis:6379
+  #     - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+  #     - GEMINI_API_KEY=${GEMINI_API_KEY}
+  #     - AGNO_API_KEY=${AGNO_API_KEY}
+  #     - MCP_CONTEXT7_API_KEY=${MCP_CONTEXT7_API_KEY}
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ./backend:/app
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
 
   # Nginx (Optional - for production deployment)
   nginx:
@@ -97,8 +97,8 @@ services:
     volumes:
       - .:/app
       - /app/node_modules
-    depends_on:
-      - backend
+    # depends_on:
+    #   - backend
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
       interval: 30s
