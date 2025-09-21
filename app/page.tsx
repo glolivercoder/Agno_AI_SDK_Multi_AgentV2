@@ -1,173 +1,287 @@
-import { Suspense } from 'react';
+'use client';
+
 import Link from 'next/link';
-import { ArrowRight, Brain, Zap, Shield, Users, Workflow, BarChart3 } from 'lucide-react';
+import { useState } from 'react';
+import {
+  PenTool,
+  BarChart3,
+  MessageSquare,
+  Palette,
+  Code,
+  Plus,
+  Sparkles,
+  ArrowRight,
+  CheckCircle,
+  Star,
+  Users
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
+const templates = [
+  {
+    id: 'content-writer',
+    name: 'Content Creator',
+    description: 'Write blog posts, social media content, emails, and marketing materials',
+    icon: PenTool,
+    color: 'bg-blue-500',
+    popular: true,
+    useCase: 'Perfect for bloggers, marketers, and content teams'
+  },
+  {
+    id: 'data-analyst',
+    name: 'Data Analyst',
+    description: 'Analyze spreadsheets, create reports, find insights, and visualize data',
+    icon: BarChart3,
+    color: 'bg-green-500',
+    popular: true,
+    useCase: 'Ideal for analysts, managers, and business intelligence'
+  },
+  {
+    id: 'customer-support',
+    name: 'Customer Helper',
+    description: 'Answer questions, handle support tickets, and assist customers',
+    icon: MessageSquare,
+    color: 'bg-purple-500',
+    popular: false,
+    useCase: 'Great for customer service and support teams'
+  },
+  {
+    id: 'creative-assistant',
+    name: 'Creative Assistant',
+    description: 'Generate ideas, create images, and help with creative projects',
+    icon: Palette,
+    color: 'bg-orange-500',
+    popular: false,
+    useCase: 'Perfect for designers, artists, and creative professionals'
+  },
+  {
+    id: 'code-assistant',
+    name: 'Code Helper',
+    description: 'Help with coding, debugging, and software development tasks',
+    icon: Code,
+    color: 'bg-red-500',
+    popular: false,
+    useCase: 'Essential for developers and programming teams'
+  }
+];
+
 export default function HomePage() {
+  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
+
   return (
-    <div className="flex flex-col min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="absolute inset-0 bg-grid-white/[0.02] bg-grid-16" />
-        <div className="relative container mx-auto px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
-          <div className="mx-auto max-w-4xl text-center">
-            <div className="mb-8 flex justify-center">
-              <Badge variant="secondary" className="px-4 py-2 text-sm font-medium">
-                🚀 Powered by Agno Framework
-              </Badge>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <Sparkles className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Agno AI
+                </h1>
+                <p className="text-xs text-muted-foreground">Smart AI Assistants</p>
+              </div>
             </div>
-            <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-              Advanced{' '}
-              <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                Multi-Agent
+            <div className="flex items-center space-x-4">
+              <Button variant="ghost" size="sm">
+                <Users className="h-4 w-4 mr-2" />
+                Sign In
+              </Button>
+              <Button size="sm" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700">
+                Get Started
+              </Button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div className="container mx-auto px-4 py-16">
+        {/* Welcome Section */}
+        <div className="text-center space-y-6 mb-16">
+          <Badge variant="secondary" className="px-4 py-2">
+            <Sparkles className="h-4 w-4 mr-2" />
+            Welcome to AI Automation
+          </Badge>
+
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
+              Create Your{' '}
+              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                AI Assistant
               </span>{' '}
-              GUI Interface
+              in Minutes
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
-              Create, manage, and monitor intelligent agents with seamless integration to
-              OpenRouter and Gemini AI. Built with Next.js 15, Vercel AI SDK, and modern
-              web technologies.
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Choose from ready-made templates or build custom AI assistants that automate your work.
+              No coding required.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button size="lg" asChild className="gap-2">
-                <Link href="/dashboard">
-                  Get Started
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/docs">
-                  View Documentation
-                </Link>
-              </Button>
-            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Features Section */}
-      <section className="py-24 sm:py-32">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Everything you need to manage AI agents
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-muted-foreground">
-              Powerful features designed for developers and AI enthusiasts to create
-              sophisticated multi-agent systems.
-            </p>
-          </div>
-          <div className="mx-auto mt-16 max-w-6xl">
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <Brain className="h-10 w-10 text-primary" />
-                  <CardTitle>Agent Builder</CardTitle>
-                  <CardDescription>
-                    Visual drag-and-drop interface to create and configure AI agents
-                    with custom tools and memory systems.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <Users className="h-10 w-10 text-primary" />
-                  <CardTitle>Multi-Agent Teams</CardTitle>
-                  <CardDescription>
-                    Create collaborative teams of agents with role assignment,
-                    communication protocols, and conflict resolution.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <Workflow className="h-10 w-10 text-primary" />
-                  <CardTitle>Workflow Designer</CardTitle>
-                  <CardDescription>
-                    Design complex workflows with visual tools, orchestration,
-                    and real-time monitoring capabilities.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <Zap className="h-10 w-10 text-primary" />
-                  <CardTitle>LLM Integration</CardTitle>
-                  <CardDescription>
-                    Seamless integration with OpenRouter and Gemini AI with
-                    automatic fallback and cost optimization.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <Shield className="h-10 w-10 text-primary" />
-                  <CardTitle>MCP Context</CardTitle>
-                  <CardDescription>
-                    Advanced context management with hallucination prevention,
-                    fact-checking, and knowledge grounding.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              <Card className="border-0 shadow-lg">
-                <CardHeader>
-                  <BarChart3 className="h-10 w-10 text-primary" />
-                  <CardTitle>Real-time Analytics</CardTitle>
-                  <CardDescription>
-                    Monitor performance, track usage, and get insights with
-                    comprehensive analytics and logging.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
+          <div className="flex items-center justify-center space-x-4 pt-4">
+            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <span>Free to start</span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <span>No coding needed</span>
+            </div>
+            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <CheckCircle className="h-4 w-4 text-green-500" />
+              <span>Ready in 5 minutes</span>
             </div>
           </div>
         </div>
-      </section>
 
-      {/* CTA Section */}
-      <section className="bg-primary/5 py-24 sm:py-32">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-              Ready to build the future of AI?
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-muted-foreground">
-              Join thousands of developers who are already using Agno GUI to create
-              sophisticated multi-agent systems.
+        {/* Template Gallery */}
+        <div className="space-y-8">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl font-bold">Choose Your AI Assistant</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Start with a template designed for your needs, or create something completely custom
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button size="lg" asChild className="gap-2">
-                <Link href="/auth/register">
-                  Start Building Today
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-              </Button>
-              <Button variant="outline" size="lg" asChild>
-                <Link href="/dashboard">
-                  View Demo
-                </Link>
-              </Button>
-            </div>
           </div>
-        </div>
-      </section>
 
-      {/* Footer */}
-      <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-12 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div className="flex items-center gap-2">
-              <Brain className="h-6 w-6 text-primary" />
-              <span className="font-semibold">Agno GUI Interface</span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              © 2024 Agno GUI Team. Built with Next.js 15 and Vercel AI SDK.
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {templates.map((template) => {
+              const Icon = template.icon;
+              return (
+                <Card
+                  key={template.id}
+                  className={`relative cursor-pointer transition-all duration-200 hover:shadow-xl hover:scale-105 ${
+                    selectedTemplate === template.id
+                      ? 'ring-2 ring-blue-500 shadow-xl'
+                      : 'hover:shadow-lg'
+                  }`}
+                  onClick={() => setSelectedTemplate(template.id)}
+                >
+                  {template.popular && (
+                    <div className="absolute -top-2 -right-2 z-10">
+                      <Badge className="bg-gradient-to-r from-orange-400 to-orange-600">
+                        <Star className="h-3 w-3 mr-1" />
+                        Popular
+                      </Badge>
+                    </div>
+                  )}
+
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center space-x-4">
+                      <div className={`w-12 h-12 ${template.color} rounded-xl flex items-center justify-center`}>
+                        <Icon className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-lg">{template.name}</CardTitle>
+                        <CardDescription className="text-sm">{template.useCase}</CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+
+                  <CardContent className="space-y-4">
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {template.description}
+                    </p>
+
+                    {selectedTemplate === template.id && (
+                      <div className="space-y-3 pt-2 border-t">
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Setup time:</span>
+                          <span className="font-medium text-green-600">~2 minutes</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span className="text-muted-foreground">Difficulty:</span>
+                          <span className="font-medium text-blue-600">Very Easy</span>
+                        </div>
+                        <Button
+                          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                          asChild
+                        >
+                          <Link href={`/create/${template.id}`}>
+                            <Plus className="h-4 w-4 mr-2" />
+                            Create {template.name}
+                            <ArrowRight className="h-4 w-4 ml-2" />
+                          </Link>
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+
+          {/* Custom Option */}
+          <div className="text-center pt-8">
+            <Card className="max-w-md mx-auto border-dashed border-2 hover:border-solid hover:shadow-lg transition-all cursor-pointer">
+              <CardContent className="pt-8 pb-8">
+                <div className="space-y-4">
+                  <div className="w-16 h-16 bg-gradient-to-r from-gray-400 to-gray-600 rounded-xl flex items-center justify-center mx-auto">
+                    <Plus className="h-8 w-8 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold">Build Custom Assistant</h3>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Create something completely unique for your specific needs
+                    </p>
+                  </div>
+                  <Button variant="outline" className="w-full" asChild>
+                    <Link href="/create/custom">
+                      Start from Scratch
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </footer>
+
+        {/* Features Preview */}
+        <div className="mt-24 space-y-8">
+          <div className="text-center space-y-4">
+            <h2 className="text-3xl font-bold">Why Choose Agno AI?</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Built for everyone - from beginners to experts
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto">
+                <Sparkles className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold">Smart Automation</h3>
+              <p className="text-muted-foreground">
+                Handle repetitive tasks automatically, saving you hours every week
+              </p>
+            </div>
+
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto">
+                <CheckCircle className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold">Easy to Use</h3>
+              <p className="text-muted-foreground">
+                No technical skills required. Get started with simple templates
+              </p>
+            </div>
+
+            <div className="text-center space-y-4">
+              <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto">
+                <BarChart3 className="h-8 w-8 text-white" />
+              </div>
+              <h3 className="text-xl font-semibold">Powerful Results</h3>
+              <p className="text-muted-foreground">
+                Professional-quality output that scales with your business
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
